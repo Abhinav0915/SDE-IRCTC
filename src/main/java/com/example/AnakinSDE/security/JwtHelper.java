@@ -13,22 +13,23 @@ import java.util.function.Function;
 
 @Component
 public class JwtHelper {
-    //requirement :
+    // Token validity period in seconds
     public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
 
-    //    public static final long JWT_TOKEN_VALIDITY =  60;
+    // Secret key for token generation and validation
     private final String secret = "afafasfafafasfasfasfafacasdasfasxASFACASDFACASDFASFASFDAFASFASDAADSCSDFADCVSGCFVADXCcadwavfsfarvf";
 
-    //retrieve username from jwt token
+    // Retrieve username from JWT token
     public String getUsernameFromToken(String token) {
         return getClaimFromToken(token, Claims::getSubject);
     }
 
-    //retrieve expiration date from jwt token
+    // Retrieve expiration date from JWT token
     public Date getExpirationDateFromToken(String token) {
         return getClaimFromToken(token, Claims::getExpiration);
     }
 
+    // Method to retrieve a specific claim from the JWT token
     public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = getAllClaimsFromToken(token);
         return claimsResolver.apply(claims);
@@ -50,6 +51,7 @@ public class JwtHelper {
         Map<String, Object> claims = new HashMap<>();
         return doGenerateToken(claims, userDetails.getUsername());
     }
+
     private String doGenerateToken(Map<String, Object> claims, String subject) {
 
         return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))

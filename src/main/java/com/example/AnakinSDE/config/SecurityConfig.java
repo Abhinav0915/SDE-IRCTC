@@ -18,17 +18,23 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 public class SecurityConfig {
 
+    // Autowired bean for JWT authentication entry point
     @Autowired
     private JwtAuthenticationEntryPoint point;
 
+    // Autowired bean for JWT authentication filter
     @Autowired
     private JWTAuthenticationFilter filter;
 
+    // Autowired bean for user details service
     @Autowired
     private UserDetailsService userDetailsService;
 
+    // Autowired bean for password encoder
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    // Bean definition for security filter chain
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         http.csrf(csrf -> csrf.disable())
@@ -49,6 +55,7 @@ public class SecurityConfig {
         return http.build();
     }
 
+    // Bean definition for DaoAuthenticationProvider
     @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider(){
       DaoAuthenticationProvider provider = new DaoAuthenticationProvider();

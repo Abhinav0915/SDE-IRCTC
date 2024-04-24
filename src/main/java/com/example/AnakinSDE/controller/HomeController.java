@@ -14,20 +14,26 @@ import java.util.List;
 @RestController
 public class HomeController {
 
+
+    // Autowired bean for user service implementation
     @Autowired
     private UserServiceImpl userService;
 
-
+    // Logger for HomeController
     Logger logger = LoggerFactory.getLogger(HomeController.class);
 
+    // Endpoint to get list of users
     @GetMapping("/users")
-    public List<User> getUser(){
+    public List<User> getUser() {
+        // Logging message for getting users
         System.out.println("Getting Users...");
         return userService.getUsers();
     }
 
+    // Test endpoint
     @RequestMapping("/test")
     public String test() {
+        // Logging warning message
         this.logger.warn("This is working message");
         return "Testing message";
     }

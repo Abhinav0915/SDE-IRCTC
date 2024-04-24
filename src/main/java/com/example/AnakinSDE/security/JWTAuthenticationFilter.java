@@ -22,28 +22,33 @@ import java.io.IOException;
 @Component
 public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
-    private final Logger logger = (Logger) LoggerFactory.getLogger(OncePerRequestFilter.class);
+    // Logger for JWTAuthenticationFilter
+    private final Logger logger = LoggerFactory.getLogger(JWTAuthenticationFilter.class);
+
+    // Autowired bean for JwtHelper
     @Autowired
     private JwtHelper jwtHelper;
 
-
+    // Autowired bean for UserDetailsService
     @Autowired
     private UserDetailsService userDetailsService;
+
+    // Method to filter incoming requests
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException, MalformedJwtException {
 
+        // Get authorization header from request
         String requestHeader = request.getHeader("Authorization");
-        //Bearer 2352345235sdfrsfgsdfsdf
-        logger.info(" Header :  {}");
+
+        // Check if the authorization header is present and starts with "Bearer"
         String username = null;
         String token = null;
         if (requestHeader != null && requestHeader.startsWith("Bearer")) {
-            //looking good
+            // Extract token from the authorization header
             token = requestHeader.substring(7);
             try {
-
+                // Extract username from token
                 username = this.jwtHelper.getUsernameFromToken(token);
-
             } catch (IllegalArgumentException e) {
                 logger.info("Illegal Argument while fetching the username !!");
                 e.printStackTrace();
@@ -52,40 +57,29 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
                 e.printStackTrace();
             } catch (Exception e) {
                 e.printStackTrace();
-
             }
-
-
         } else {
             logger.info("Invalid Header Value !! ");
         }
 
-
-        //
+        // If username is not null and there is no existing authentication in SecurityContextHolder
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-
-
-            //fetch user detail from username
+            // Fetch user details from username
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+            // Validate token
             Boolean validateToken = this.jwtHelper.validateToken(token, userDetails);
             if (validateToken) {
-
-                //set the authentication
+                // Set the authentication in SecurityContextHolder
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-
-
             } else {
                 logger.info("Validation fails !!");
             }
-
-
         }
 
+        // Continue with the filter chain
         filterChain.doFilter(request, response);
-
-
     }
 
 }

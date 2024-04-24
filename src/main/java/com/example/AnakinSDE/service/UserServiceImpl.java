@@ -30,6 +30,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll();
     }
 
+    //Method to register a new user
     public User createUser(User user){
         user.setId(UUID.randomUUID().toString());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -38,23 +39,6 @@ public class UserServiceImpl implements UserService {
 
 
 
-//    @Override
-//    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-//        User user = userRepository.findByUsername(username);
-//        if (user == null) {
-//            throw new UsernameNotFoundException("User not found with username: " + username);
-//        }
-//        return org.springframework.security.core.userdetails.User.builder()
-//                .username(user.getUsername())
-//                .password(user.getPassword())
-//                .roles(user.getRole().name())
-//                .build();
-//    }
-//
-//    @Override
-//    public User findByUsername(String username) {
-//        return userRepository.findByUsername(username);
-//    }
 
 
 

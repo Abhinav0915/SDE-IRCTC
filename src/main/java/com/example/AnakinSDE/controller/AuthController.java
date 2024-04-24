@@ -25,26 +25,31 @@ import java.util.Collections;
 @RequestMapping("/auth")
 public class AuthController {
 
+    // Autowired bean for user details service
     @Autowired
     private UserDetailsService userDetailsService;
 
+    // Autowired bean for authentication manager
     @Autowired
     private AuthenticationManager manager;
 
+    // Autowired bean for password encoder
     @Autowired
-    private PasswordEncoder passwordEncoder; // Add this line
+    private PasswordEncoder passwordEncoder;
 
+    // Autowired bean for user service implementation
     @Autowired
     private UserServiceImpl userService;
 
-
+    // Autowired bean for JWT helper
     @Autowired
     private JwtHelper helper;
 
+    // Logger for AuthController
     private Logger logger = LoggerFactory.getLogger(AuthController.class);
 
 
-
+    // Endpoint for user login
     @PostMapping("/login")
     public ResponseEntity<JwtResponse> login(@RequestBody JwtRequest request) {
 
@@ -63,24 +68,27 @@ public class AuthController {
 
 
 
+    // Method to authenticate user credentials
     private void doAuthenticate(String email, String password) {
-
+        // Creating an authentication token with provided email and password
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(email, password);
         try {
+            // Authenticating the user using the authentication manager
             manager.authenticate(authentication);
-
-
         } catch (BadCredentialsException e) {
+            // Handling bad credentials exception
             throw new BadCredentialsException(" Invalid Username or Password  !!");
         }
-
     }
 
+    // Exception handler for BadCredentialsException
     @ExceptionHandler(BadCredentialsException.class)
     public String exceptionHandler() {
+        // Returning a message for invalid credentials
         return "Credentials Invalid !!";
     }
 
+    // Endpoint for user registration
     @PostMapping("/createUser")
     public User createUser(@RequestBody User user){
         return userService.createUser(user);

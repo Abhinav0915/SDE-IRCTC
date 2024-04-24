@@ -18,7 +18,7 @@ public class TrainServiceImpl implements TrainService{
     }
 
 
-
+    //Trains to be stored in a list found between a source and destination
     @Override
     public List<Train> findTrainsBetweenStations(TrainSearchRequest searchRequest) {
         return trainRepository.findBySourceAndDestination(
