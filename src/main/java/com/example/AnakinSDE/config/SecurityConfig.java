@@ -35,6 +35,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         auth ->
                                 auth.requestMatchers("/home/**").authenticated()
+                                        .requestMatchers("/trains/findTrains").authenticated()
                                         .requestMatchers("/auth/login")
                                 .permitAll()
                                         .requestMatchers("/auth/createUser").permitAll()
