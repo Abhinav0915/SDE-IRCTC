@@ -76,13 +76,50 @@ To run the application locally, follow these steps:
 
 ### Train Management
 
-- POST /trains/add: Add a new train to the system.
-- POST /trains/between: Get a list of trains between two stations.
+- POST /trains/add: To add a train, make a POST request to /trains/add endpoint with the following parameters:
 
-### Booking Management
+    * API-Key: The API key for authorization. (Required)
+    * Train Details: The details of the train to be added including source, destination,    and schedule. (Required)
 
-- POST /bookings/book: Book a ticket for a specific train.
+    ```bash
+    {
+    "API-Key": "your-api-key",
+    "train": {
+         "trainName" : "DDN-CNB",
+         "source" : "Dheradun",
+         "sourceTime": "19:15",
+         "destination" : "Kanpur",
+         "destinationTime" : "01:45",
+         "seats": 500
+         }
+    }
 
+    ```
+
+
+- POST /trains/between: To get trains between stations, make a POST request to /trains/between endpoint with the following parameter:
+
+   ```bash
+    {
+    "source": "Station A",
+    "destination": "Station B"
+    }
+    ```
+
+
+## Mandatory Requirements
+
+1. Protected the admin API with a hardcoded API Key so that no user can access the APIs.
+2. For the SQL Queries I have used the "@Entity" annotation of the Springboot Framework to perform the SQL Queries.
+
+To make the user Table:
+```bash
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL
+);
+```
 ## Contributors
 
 - Abhinav Saxena (@Abhinav0915)
