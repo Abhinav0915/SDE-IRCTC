@@ -17,14 +17,14 @@ public class AppConfig {
 
 
 
-    @Bean
-    public UserDetailsService userDetailsService() {
-        UserDetails userDetails = User.builder().
-                username("Abhinav")
-                .password(passwordEncoder().encode("abhinav")).roles("ADMIN").
-                build();
-        return new InMemoryUserDetailsManager(userDetails);
-    }
+//    @Bean
+//    public UserDetailsService userDetailsService() {
+//        UserDetails userDetails = User.builder().
+//                username("Abhinav")
+//                .password(passwordEncoder().encode("abhinav")).roles("ADMIN").
+//                build();
+//        return new InMemoryUserDetailsManager(userDetails);
+//    }
 
 
 
