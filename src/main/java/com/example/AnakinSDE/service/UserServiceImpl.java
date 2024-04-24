@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import org.springframework.security.core.authority.*;
 
@@ -24,49 +26,37 @@ public class UserServiceImpl implements UserService {
     private PasswordEncoder passwordEncoder;
 
 
-
-
-    @Override
-    public void register(UserDto userDto) {
-        User user = new User();
-        user.setUsername(userDto.getUsername());
-        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
-        user.setRole(userDto.getRole());
-        userRepository.save(user);
+    public List<User> getUsers(){
+        return userRepository.findAll();
     }
 
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username);
-        if (user == null) {
-            throw new UsernameNotFoundException("User not found with username: " + username);
-        }
-        return org.springframework.security.core.userdetails.User.builder()
-                .username(user.getUsername())
-                .password(user.getPassword())
-                .roles(user.getRole().name())
-                .build();
-    }
-
-    @Override
-    public User findByUsername(String username) {
-        return userRepository.findByUsername(username);
+    public User createUser(User user){
+        user.setId(UUID.randomUUID().toString());
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return userRepository.save(user);
     }
 
 
 
 //    @Override
-//    public String login(LoginDto loginDto) {
-//        return null;
+//    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+//        User user = userRepository.findByUsername(username);
+//        if (user == null) {
+//            throw new UsernameNotFoundException("User not found with username: " + username);
+//        }
+//        return org.springframework.security.core.userdetails.User.builder()
+//                .username(user.getUsername())
+//                .password(user.getPassword())
+//                .roles(user.getRole().name())
+//                .build();
+//    }
+//
+//    @Override
+//    public User findByUsername(String username) {
+//        return userRepository.findByUsername(username);
 //    }
 
-//    @Override
-//    public String login(LoginDto loginDto) {
-//        Authentication authentication = authenticationManager.authenticate(
-//                new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword()));
-//        SecurityContextHolder.getContext().setAuthentication(authentication);
-//        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-//        return jwtTokenUtil.generateToken(userDetails);
-//    }
+
+
+
 }

@@ -1,7 +1,6 @@
 package com.example.AnakinSDE.config;
 
-import com.example.AnakinSDE.service.UserServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,7 +21,7 @@ public class AppConfig {
     public UserDetailsService userDetailsService() {
         UserDetails userDetails = User.builder().
                 username("Abhinav")
-                .password(passwordEncoder().encode("Abhinav")).roles("ADMIN").
+                .password(passwordEncoder().encode("abhinav")).roles("ADMIN").
                 build();
         return new InMemoryUserDetailsManager(userDetails);
     }

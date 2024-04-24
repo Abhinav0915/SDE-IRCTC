@@ -45,49 +45,22 @@ public class AuthController {
 
 
 
-//    @PostMapping("/login")
-//    public ResponseEntity<JwtResponse> login(@RequestBody JwtRequest request) {
-//
-//        this.doAuthenticate(request.getUsername(), request.getPassword());
-//
-//
-//        UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUsername());
-//        String token = this.helper.generateToken(userDetails);
-//
-//        JwtResponse response = JwtResponse.builder()
-//                .JwtToken(token)
-//                .username(userDetails.getUsername()).build();
-//        return new ResponseEntity<>(response, HttpStatus.OK);
-//    }
     @PostMapping("/login")
     public ResponseEntity<JwtResponse> login(@RequestBody JwtRequest request) {
 
-        // Load user details from the database
-        User user = userService.findByUsername(request.getUsername());
+        this.doAuthenticate(request.getUsername(), request.getPassword());
 
-        // Check if user exists and password matches
-        if (user == null || !passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new BadCredentialsException("Invalid Username or Password");
-        }
 
-        // Generate JWT token
-        UserDetails userDetails = new org.springframework.security.core.userdetails.User(
-                user.getUsername(), user.getPassword(), Collections.emptyList());
-        String token = helper.generateToken(userDetails);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUsername());
+        String token = this.helper.generateToken(userDetails);
 
-        // Build response
         JwtResponse response = JwtResponse.builder()
                 .JwtToken(token)
-                .username(user.getUsername()).build();
+                .username(userDetails.getUsername()).build();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 
-    @PostMapping("/register")
-    public ResponseEntity<String> registerUser(@RequestBody UserDto user) {
-        userService.register(user);
-        return new ResponseEntity<>("User registered successfully", HttpStatus.CREATED);
-    }
 
 
     private void doAuthenticate(String email, String password) {
@@ -108,4 +81,8 @@ public class AuthController {
         return "Credentials Invalid !!";
     }
 
+    @PostMapping("/createUser")
+    public User createUser(@RequestBody User user){
+        return userService.createUser(user);
+    }
 }
