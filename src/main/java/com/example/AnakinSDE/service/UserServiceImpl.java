@@ -32,7 +32,6 @@ public class UserServiceImpl implements UserService {
 
     //Method to register a new user
     public User createUser(User user){
-        user.setId(UUID.randomUUID().toString());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }

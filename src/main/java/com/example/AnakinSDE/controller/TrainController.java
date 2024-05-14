@@ -36,7 +36,7 @@ public class TrainController {
         return new ResponseEntity<>(message, HttpStatus.CREATED);
     }
     // Endpoint to find trains between 2 stations
-    @PostMapping("/between")
+    @GetMapping("/between")
     public ResponseEntity<List<Train>> getTrainsBetweenStations(
             @RequestBody TrainSearchRequest searchRequest) {
         List<Train> trains = trainServiceImpl.findTrainsBetweenStations(searchRequest);
